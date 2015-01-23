@@ -16,7 +16,18 @@
                 </group>
             </field>
         </record>
-
+        <!--group by Manufacture-->
+       <record id="product_search_form_view_manufacture" model="ir.ui.view">
+         <field name="name">product.product.search.grbymanufacture</field>
+         <field name="model">product.template</field>
+         <field name="mode">primary</field>
+         <field name="inherit_id" ref="product.product_template_search_view"/>
+         <field name="arch" type="xml">
+          <xpath expr="//group[@string='Group by...']" position="inside">
+            <filter string='Manufacture' name="manufacturer"  domain="[]" context="{'group_by' : 'manufacturer'}"/>
+          </xpath>
+         </field>
+        </record>
     </data>
 </openerp>
 
