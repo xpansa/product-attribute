@@ -24,7 +24,7 @@
          <field name="inherit_id" ref="product.product_template_search_view"/>
          <field name="arch" type="xml">
           <xpath expr="//group[@string='Group by...']" position="inside">
-            <filter string='Manufacture' name="manufacturer"  domain="[]" context="{'group_by' : 'manufacturer'}"/>
+            <filter string='Manufacturer' name="manufacturer"  domain="[]" context="{'group_by' : 'manufacturer'}"/>
           </xpath>
          </field>
         </record>
