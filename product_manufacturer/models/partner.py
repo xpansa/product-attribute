@@ -17,5 +17,11 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from . import product_manufacturer
-from . import partner
+
+from openerp import models, fields
+
+
+class Partner(models.Model):
+    _inherit = 'res.partner'
+
+    manufacturer = fields.Boolean(string='Manufacturer')

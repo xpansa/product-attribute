@@ -26,7 +26,8 @@
     'depends': ['product'],
     'demo': [],
     'data': [
-        'views/product_manufacturer_view.xml'
+        'views/product_manufacturer_view.xml',
+        'views/partner_view.xml',
     ],
     'auto_install': False,
     'installable': True,
