@@ -18,7 +18,23 @@
 #
 ##############################################################################
 
-from openerp import models, fields
+from openerp import models, fields, api
+
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    manufacturer_pref = fields.Char('Manufacturer Product Code')
+
+    @api.model
+    def create(self, vals):
+        template_id = vals.get("product_tmpl_id")
+        if template_id:
+            if "manufacturer_pref" not in vals:
+                pref = self.env["product.template"].browse(
+                    template_id).manufacturer_pref
+                vals.update({"manufacturer_pref": pref})
+        return super(ProductProduct, self).create(vals)
 
 
 class ProductTemplate(models.Model):
