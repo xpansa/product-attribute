@@ -18,9 +18,10 @@
 {
     "name": "Product - Many Categories",
     "version": "1.0.2",
-    "author": "Sharoon Thomas",
+    "author": "Sharoon Thomas,Odoo Community Association (OCA)",
     "contributors": ["Mikel Arregi <mikelarregi@avanzosc.es>"],
     "website": "",
+    "license": "GPL-3 or any later version",
     "category": "Product Management",
     "depends": ['base', 'product'],
     "description": """

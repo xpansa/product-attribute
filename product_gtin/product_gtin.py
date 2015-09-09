@@ -19,24 +19,94 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+import logging
+_logger = logging.getLogger(__name__)
 
 from openerp.osv import orm, fields
 import operator
+
+
+CONSTRAINT_MESSAGE = 'Error: Invalid EAN/GTIN code'
+HELP_MESSAGE = ("EAN8 EAN13 UPC JPC GTIN \n"
+                "http://en.wikipedia.org/wiki/Global_Trade_Item_Number")
 
 
 def is_pair(x):
     return not x % 2
 
 
-def check_ean(eancode):
-    if not eancode:
-        return True
-    if not len(eancode) in [8, 11, 12, 13, 14]:
+def check_ean8(eancode):
+    """Check if the given ean code answer ean8 requirements
+    For more details: http://en.wikipedia.org/wiki/EAN-8
+
+    :param eancode: string, ean-8 code
+    :return: boolean
+    """
+    if not eancode or not eancode.isdigit():
         return False
-    try:
-        int(eancode)
-    except:
+
+    if not len(eancode) == 8:
+        _logger.warn('Ean8 code has to have a length of 8 characters.')
         return False
+
+    sum = 0
+    ean_len = int(len(eancode))
+    for i in range(ean_len-1):
+        if is_pair(i):
+            sum += 3 * int(eancode[i])
+        else:
+            sum += int(eancode[i])
+    check = 10 - operator.mod(sum, 10)
+    if check == 10:
+        check = 0
+
+    return check == int(eancode[-1])
+
+
+def check_upc(upccode):
+    """Check if the given code answers upc requirements
+    For more details:
+    http://en.wikipedia.org/wiki/Universal_Product_Code
+
+    :param upccode: string, upc code
+    :return: bool
+    """
+    if not upccode or not upccode.isdigit():
+        return False
+
+    if not len(upccode) == 12:
+        _logger.warn('UPC code has to have a length of 12 characters.')
+        return False
+
+    sum_pair = 0
+    ean_len = int(len(upccode))
+    for i in range(ean_len-1):
+        if is_pair(i):
+            sum_pair += int(upccode[i])
+    sum = sum_pair * 3
+    for i in range(ean_len-1):
+        if not is_pair(i):
+            sum += int(upccode[i])
+    check = ((sum/10 + 1) * 10) - sum
+
+    return check == int(upccode[-1])
+
+
+def check_ean13(eancode):
+    """Check if the given ean code answer ean13 requirements
+    For more details:
+    http://en.wikipedia.org/wiki/International_Article_Number_%28EAN%29
+
+    :param eancode: string, ean-13 code
+    :return: boolean
+    """
+    if not eancode or not eancode.isdigit():
+        return False
+
+    if not len(eancode) == 13:
+        _logger.warn('Ean13 code has to have a length of 13 characters.')
+        return False
+
     sum = 0
     ean_len = int(len(eancode))
     for i in range(ean_len-1):
@@ -48,9 +118,36 @@ def check_ean(eancode):
     check = 10 - operator.mod(sum, 10)
     if check == 10:
         check = 0
-    if check != int(eancode[-1]):
+
+    return check == int(eancode[-1])
+
+
+def check_ean11(eancode):
+    pass
+
+
+def check_gtin14(eancode):
+    pass
+
+
+DICT_CHECK_EAN = {8: check_ean8,
+                  11: check_ean11,
+                  12: check_upc,
+                  13: check_ean13,
+                  14: check_gtin14,
+                  }
+
+
+def check_ean(eancode):
+    if not eancode:
+        return True
+    if not len(eancode) in DICT_CHECK_EAN:
         return False
-    return True
+    try:
+        int(eancode)
+    except:
+        return False
+    return DICT_CHECK_EAN[len(eancode)](eancode)
 
 
 class product_product(orm.Model):
@@ -64,12 +161,11 @@ class product_product(orm.Model):
 
     _columns = {
         'ean13': fields.char(
-            'EAN', size=14,
-            help="Code for EAN8 EAN13 UPC JPC GTIN "
-            "http://en.wikipedia.org/wiki/Global_Trade_Item_Number"),
+            'EAN/GTIN', size=14,
+            help="Code for %s" % HELP_MESSAGE),
     }
 
-    _constraints = [(_check_ean_key, 'Error: Invalid EAN code', ['ean13'])]
+    _constraints = [(_check_ean_key, CONSTRAINT_MESSAGE, ['ean13'])]
 
 
 class product_packaging(orm.Model):
@@ -84,10 +180,10 @@ class product_packaging(orm.Model):
     _columns = {
         'ean': fields.char(
             'EAN', size=14,
-            help='Barcode number for EAN8 EAN13 UPC JPC GTIN'),
+            help='Barcode number for %s' % HELP_MESSAGE),
         }
 
-    _constraints = [(_check_ean_key, 'Error: Invalid EAN code', ['ean'])]
+    _constraints = [(_check_ean_key, CONSTRAINT_MESSAGE, ['ean'])]
 
 
 class res_partner(orm.Model):
@@ -102,8 +198,7 @@ class res_partner(orm.Model):
     _columns = {
         'ean13': fields.char(
             'EAN', size=14,
-            help="Code for EAN8 EAN13 UPC JPC GTIN "
-            "http://en.wikipedia.org/wiki/Global_Trade_Item_Number"),
+            help="Code for %s" % HELP_MESSAGE),
         }
 
-    _constraints = [(_check_ean_key, 'Error: Invalid EAN code', ['ean13'])]
+    _constraints = [(_check_ean_key, CONSTRAINT_MESSAGE, ['ean13'])]
