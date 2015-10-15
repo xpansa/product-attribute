@@ -1,7 +1,8 @@
+# -*- coding: utf-8 -*-
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (C) 2004-2009 Tiny SPRL (<http://tiny.be>).
+#    This module copyright (C) 2015 Therp BV <http://therp.nl>.
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -17,19 +18,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-    'name': 'Products Manufacturers',
-    'version': '8.0.1.0.0',
-    'author': "OpenERP SA,Odoo Community Association (OCA)",
-    'license': 'AGPL-3',
-    'contributors': ['Acysos SL <info@acysos.com>'],
-    'category': 'Purchase Management',
-    'depends': ['product'],
-    'demo': [],
-    'data': [
-        'views/product_manufacturer_view.xml',
-        'views/partner_view.xml',
-    ],
-    'auto_install': False,
-    'installable': True,
-}
+
+
+def post_init_hook(cr):
+    cr.execute("""UPDATE product_pricelist_item SET base_ext = base""")

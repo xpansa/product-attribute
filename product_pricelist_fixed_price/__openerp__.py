@@ -2,9 +2,8 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution
-#    Copyright (c) 2011 Zikzakmedia S.L. (http://zikzakmedia.com)
-#    All Rights Reserved.
-#    $Id$
+#    Copyright (c) 2014 Serv. Tecnol. Avanzados (http://www.serviciosbaeza.com)
+#                       Pedro M. Baeza <pedro.baeza@serviciosbaeza.com>
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as published
@@ -22,22 +21,22 @@
 ##############################################################################
 
 {
-    'name': 'Product Sequence',
-    'version': '8.0.0.1.0',
-    'author': "Zikzakmedia SL,Odoo Community Association (OCA)",
-    'website': 'http://www.zikzakmedia.com',
-    'license': 'AGPL-3',
-    'category': 'Generic Modules/Inventory Control',
-    'depends': [
-        'product',
+    "name": "Fixed price in pricelists",
+    "version": "8.0.1.0",
+    "author":  "Serv. Tecnol. Avanzados - Pedro M. Baeza,"
+               "Therp B.V.,"
+               "Odoo Community Association (OCA),"
+               "Giovanni Francesco Capalbo",
+    "category": "Sales Management",
+    "website": "www.serviciosbaeza.com",
+    "license": "AGPL-3",
+    "depends": [
+        "product",
     ],
-    'data': [
-        'data/product_sequence.xml',
+    "demo": [],
+    "data": [
+        'view/product_pricelist_item_view.xml',
     ],
-    'demo': [
-        'demo/product_product.xml'
-    ],
-    'pre_init_hook': 'update_null_and_slash_codes',
-    'auto_install': False,
+    "init_hook": "init_hook",
     'installable': True,
 }

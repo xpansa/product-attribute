@@ -18,18 +18,18 @@
 #
 ##############################################################################
 {
-    'name': 'Products Manufacturers',
-    'version': '8.0.1.0.0',
-    'author': "OpenERP SA,Odoo Community Association (OCA)",
-    'license': 'AGPL-3',
-    'contributors': ['Acysos SL <info@acysos.com>'],
-    'category': 'Purchase Management',
-    'depends': ['product'],
-    'demo': [],
-    'data': [
-        'views/product_manufacturer_view.xml',
-        'views/partner_view.xml',
-    ],
-    'auto_install': False,
-    'installable': True,
+    "name":"Product Catalog - Print Report of product catalog with product image",
+    "version":"1.0",
+    "author":"Tiny",
+    "category":"Generic Modules/Inventory Control",
+    "description": """
+    This module use to print report of product catalog with product image, list price
+    """,
+    "depends":["base","product"],
+    "demo_xml":[],
+    "update_xml":['product_report.xml','product_wizard.xml'],
+    "active":False,
+    "installable":False,
 }
+# vim:expandtab:smartindent:tabstop=4:softtabstop=4:shiftwidth=4:
+
