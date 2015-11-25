@@ -1,35 +1,49 @@
 <?xml version="1.0" ?>
 <openerp>
-    <data>
+	<data>
 
-        <record model="ir.ui.view" id="product_template_manufacturer_form_view">
-            <field name="name">product.template.manufacturer.form</field>
-            <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
-            <field name="arch" type="xml">
-                <group name="procurement" position="inside">
-                    <group string="Manufacturer">
-                        <field name="manufacturer" domain="[('manufacturer', '=', True)]"
-                            context="{'default_supplier':True, 'default_customer':False}"/>
-                        <field name="manufacturer_pname"/>
-                        <field name="manufacturer_pref"/>
-                        <field name="manufacturer_purl" widget="url"/>
-                    </group>
-                </group>
-            </field>
-        </record>
-        <!--group by Manufacture-->
-       <record id="product_search_form_view_manufacture" model="ir.ui.view">
-         <field name="name">product.product.search.grbymanufacture</field>
-         <field name="model">product.template</field>
-         <field name="mode">primary</field>
-         <field name="inherit_id" ref="product.product_template_search_view"/>
-         <field name="arch" type="xml">
-          <xpath expr="//group[@string='Group by...']" position="inside">
-            <filter string='Manufacturer' name="manufacturer"  domain="[]" context="{'group_by' : 'manufacturer'}"/>
-          </xpath>
-         </field>
-        </record>
-    </data>
+		<record model="ir.ui.view" id="product_template_manufacturer_form_view">
+			<field name="name">product.template.manufacturer.form</field>
+			<field name="model">product.template</field>
+			<field name="inherit_id" ref="product.product_template_form_view" />
+			<field name="arch" type="xml">
+				<group name="inventory" position="inside">
+					<group string="Manufacturer">
+						<field name="manufacturer" domain="[('manufacturer', '=', True)]"
+							context="{'default_supplier':True, 'default_customer':False}" />
+						<field name="manufacturer_pname" />
+						<field name="manufacturer_pref" />
+						<field name="manufacturer_purl" widget="url" />
+					</group>
+				</group>
+			</field>
+		</record>
+		<!--group by Manufacture -->
+		<record id="product_search_form_view_manufacture" model="ir.ui.view">
+			<field name="name">product.product.search.grbymanufacture</field>
+			<field name="model">product.template</field>
+			<field name="mode">primary</field>
+			<field name="inherit_id" ref="product.product_template_search_view" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='pricelist_id']" position="after">
+					<filter string='Manufacturer' name="manufacturer" domain="[]"
+						context="{'group_by' : 'manufacturer'}" />
+				</xpath>
+			</field>
+		</record>
+
+		<!--Added manufacturer code into  Easy Edit Form View -->
+		<record id="product_variant_easy_edit_view" model="ir.ui.view">
+			<field name="name">product.product.oldcode</field>
+			<field name="model">product.product</field>
+			<field name="inherit_id" ref="product.product_variant_easy_edit_view" />
+			<field name="arch" type="xml">
+				<field name="default_code" position="after">
+					<field name="manufacturer_pref"/>
+				</field>
+			</field>
+		</record>
+
+	</data>
 </openerp>
 
